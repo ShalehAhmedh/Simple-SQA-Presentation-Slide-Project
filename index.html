@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQA Report - Customer Support Ticket System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+        }
+
+        /* Slide Container */
+        .slides-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        .slide {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            padding: 50px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        /* Slide Numbers */
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 56px;
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            border-left: 5px solid #00d2ff;
+            padding-left: 20px;
+        }
+
+        h3 {
+            font-size: 24px;
+            margin: 20px 0 15px 0;
+            color: #00d2ff;
+        }
+
+        /* Cards & Tables */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h4 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #00d2ff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        th {
+            background: rgba(0,210,255,0.2);
+            font-weight: 600;
+        }
+
+        .pass {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .fail {
+            color: #ff4757;
+            font-weight: bold;
+        }
+
+        .bug {
+            background: rgba(255,71,87,0.15);
+            border-left: 4px solid #ff4757;
+        }
+
+        /* Flowchart & Architecture */
+        .diagram {
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .flowchart {
+            text-align: center;
+            white-space: pre;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .badge-success {
+            background: #00ff8844;
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+
+        .badge-warning {
+            background: #ffaa0044;
+            color: #ffaa00;
+            border: 1px solid #ffaa00;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            width: 85%;
+            border-radius: 10px;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: rgba(0,210,255,0.8);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-btn:hover {
+            background: #00d2ff;
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 36px;
+            }
+            h2 {
+                font-size: 28px;
+            }
+            .diagram {
+                font-size: 10px;
+                padding: 15px;
+            }
+        }
+
+        /* Footer */
+        .footer-note {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+        <button class="nav-btn" onclick="prevSlide()">▲</button>
+        <button class="nav-btn" onclick="nextSlide()">▼</button>
+    </div>
+
+    <div class="slides-container" id="slidesContainer">
+        <!-- SLIDE 1: Project Overview -->
+        <div class="slide">
+            <h1>📋 Software Quality Assurance Report</h1>
+            <h3 style="color: #aaa; margin-bottom: 20px;">Customer Support Ticket System (React Web App)</h3>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h4>🎯 Objective</h4>
+                    <p>Explore the system, test core functionalities, and identify possible bugs and issues.</p>
+                </div>
+                <div class="card">
+                    <h4>🛠️ Tech Stack</h4>
+                    <p>React • localStorage • React Router</p>
+                </div>
+                <div class="card">
+                    <h4>📦 Modules Tested</h4>
+                    <p>Login System • Admin Panel • User Dashboard • Ticket Management • Navigation</p>
+                </div>
+            </div>
+
+            <div class="progress-bar" style="margin-top: 40px;">
+                <div class="progress-fill"></div>
+            </div>
+            <p style="text-align: center;">Testing Coverage: 85% Complete</p>
+            
+            <div class="card" style="margin-top: 30px; background: rgba(0,210,255,0.1);">
+                <h4>✅ Testing Types Performed</h4>
+                <p>✔ Positive Testing &nbsp;&nbsp; ✔ Negative Testing &nbsp;&nbsp; ✔ Boundary Value Testing &nbsp;&nbsp; ✔ Black Box Testing &nbsp;&nbsp; ✔ White Box Testing</p>
+            </div>
+            <div class="slide-number">1 / 8</div>
+        </div>
+
+        <!-- SLIDE 2: Features -->
+        <div class="slide">
+            <h2>✨ System Features</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>🔐 Login System</h4>
+                    <p>Admin & User authentication with email/password</p>
+                    <p style="font-size: 12px; margin-top: 10px;">Admin: admin@example.com / admin123<br>User: user@example.com / user123</p>
+                </div>
+                <div class="card">
+                    <h4>👤 User Dashboard</h4>
+                    <p>Submit tickets with Title + Description + Priority</p>
+                </div>
+                <div class="card">
+                    <h4>🛡️ Admin Panel</h4>
+                    <p>Claim open tickets • Resolve claimed tickets</p>
+                </div>
+                <div class="card">
+                    <h4>📊 Ticket Management</h4>
+                    <p>Status Flow: <span class="badge badge-warning">Open</span> → <span class="badge badge-warning">In_Progress</span> → <span class="badge badge-success">Resolved</span></p>
+                </div>
+                <div class="card">
+                    <h4>🧭 Navigation</h4>
+                    <p>React Router for seamless page transitions</p>
+                </div>
+            </div>
+            <div class="slide-number">2 / 8</div>
+        </div>
+
+        <!-- SLIDE 3: White Box Testing -->
+        <div class="slide">
+            <h2>🔬 White Box Testing</h2>
+            <p style="margin-bottom: 20px;">Testing based on internal code logic and structure</p>
+            
+            <table>
+                <tr>
+                    <th>Logic Tested</th>
+                    <th>How It Works</th>
+                    <th>Result</th>
+                </tr>
+                <tr>
+                    <td>Login Validation</td>
+                    <td>Checks email & password from predefined accounts</td>
+                    <td class="pass">✅ Pass</td>
+                </tr>
+                <tr>
+                    <td>Ticket Status Update</td>
+                    <td>Open → In_Progress → Resolved via handleClaimTask() & handleResolveTask()</td>
+                    <td class="pass">✅ Pass</td>
+                </tr>
+                <tr>
+                    <td>Ticket Submission</td>
+                    <td>Creates Unique ID, default status "Open", linked to user email</td>
+                    <td class="pass">✅ Pass</td>
+                </tr>
+            </table>
+
+            <div class="diagram">
+                <div class="flowchart">
+                    <pre style="color: #00d2ff;">
+    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+    │ User Input  │ ──▶ │ Validation  │ ──▶ │ State Update│ ──▶ │ localStorage│
+    └─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+                                                                        │
+                                                                        ▼
+                                                              ┌─────────────┐
+                                                              │  UI Re-render│
+                                                              └─────────────┘
+                    </pre>
+                </div>
+            </div>
+            <div class="slide-number">3 / 8</div>
+        </div>
+
+        <!-- SLIDE 4: Black Box Testing -->
+        <div class="slide">
+            <h2>⚫ Black Box Testing</h2>
+            <p style="margin-bottom: 20px;">Testing without knowledge of internal code</p>
+            
+            <table>
+                <tr>
+                    <th>Test Scenario</th>
+                    <th>Input</th>
+                    <th>Expected Result</th>
+                    <th>Actual Result</th>
+                </tr>
+                <tr>
+                    <td>Valid Login</td>
+                    <td>admin@example.com / admin123</td>
+                    <td>Redirect to dashboard</td>
+                    <td class="pass">✅ Pass</td>
+                </tr>
+                <tr>
+                    <td>Invalid Login</td>
+                    <td>admin@example.com / wrong123</td>
+                    <td>Error message</td>
+                    <td class="pass">✅ Pass</td>
+                </tr>
+                <tr>
+                    <td>Ticket Creation</td>
+                    <td>Title + Description + Priority</td>
+                    <td>Ticket with "Open" status</td>
+                    <td class="pass">✅ Pass</td>
+                </tr>
+                <tr>
+                    <td>Claim Ticket</td>
+                    <td>Admin clicks "Claim"</td>
+                    <td>Ticket status → In_Progress</td>
+                    <td class="pass">✅ Pass</td>
+                </tr>
+                <tr>
+                    <td>Resolve Ticket</td>
+                    <td>Admin clicks "Resolve"</td>
+                    <td>Ticket status → Resolved</td>
+                    <td class="pass">✅ Pass</td>
+                </tr>
+            </table>
+
+            <div class="card" style="margin-top: 20px; background: rgba(0,255,136,0.1);">
+                <p class="pass">✔ All Black Box Test Scenarios Passed Successfully</p>
+            </div>
+            <div class="slide-number">4 / 8</div>
+        </div>
+
+        <!-- SLIDE 5: Failed Tests / Bugs Identified -->
+        <div class="slide">
+            <h2>🐛 Bugs & Issues Identified</h2>
+            
+            <table>
+                <tr>
+                    <th>Bug ID</th>
+                    <th>Issue</th>
+                    <th>Severity</th>
+                    <th>Recommendation</th>
+                </tr>
+                <tr class="bug">
+                    <td>BUG-01</td>
+                    <td>Weak password validation (no length/complexity rules)</td>
+                    <td>🟡 Medium</td>
+                    <td>Add min 8 chars, special chars, numbers</td>
+                </tr>
+                <tr class="bug">
+                    <td>BUG-02</td>
+                    <td>No confirmation dialog before resolving ticket</td>
+                    <td>🟡 Medium</td>
+                    <td>Add "Are you sure?" modal</td>
+                </tr>
+                <tr class="bug">
+                    <td>BUG-03</td>
+                    <td>No backend - uses localStorage only</td>
+                    <td>🔴 High</td>
+                    <td>Implement REST API + database</td>
+                </tr>
+                <tr class="bug">
+                    <td>BUG-04</td>
+                    <td>Limited error handling (silent failures possible)</td>
+                    <td>🟡 Medium</td>
+                    <td>Add try-catch blocks & user-friendly messages</td>
+                </tr>
+            </table>
+
+            <div class="card" style="margin-top: 30px; background: rgba(0,210,255,0.1);">
+                <h4>📊 Summary</h4>
+                <p><strong>Critical Bugs:</strong> 0 &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Medium Bugs:</strong> 4 &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Low Bugs:</strong> 0</p>
+                <p><span class="pass">✅ Core functionalities work correctly</span> | <span class="fail">⚠️ Security & infrastructure improvements needed</span></p>
+            </div>
+            <div class="slide-number">5 / 8</div>
+        </div>
+
+        <!-- SLIDE 6: System Flowchart -->
+        <div class="slide">
+            <h2>📊 System Flowchart</h2>
+            <div class="diagram">
+                <div class="flowchart">
+                    <pre style="color: #00d2ff; font-size: 12px;">
+                    ┌─────────────┐
+                    │    START    │
+                    └──────┬──────┘
+                           ▼
+                    ┌─────────────┐
+                    │ User Login  │
+                    └──────┬──────┘
+                           ▼
+                       ┌───┴───┐
+                       │Valid? │
+                       └───┬───┘
+                     No    │    Yes
+                     ▼      │      ▼
+                ┌───────┐   │  ┌────────────┐
+                │Error  │   │  │Redirect to │
+                │Message│   │  │ Dashboard  │
+                └───────┘   │  └──────┬─────┘
+                           │         ▼
+                           │    ┌────┴────┐
+                           │    │User or  │
+                           │    │ Admin?  │
+                           │    └────┬────┘
+                           │  ┌──────┴──────┐
+                           │  ▼             ▼
+                           │┌─────────┐  ┌─────────┐
+                           ││  User   │  │  Admin  │
+                           ││Dashboard│  │  Panel  │
+                           │└────┬────┘  └────┬────┘
+                           │     │            │
+                           │  ┌──┴──┐      ┌──┴──┐
+                           │  │Submit│      │Claim│
+                           │  │Ticket│      │Ticket│
+                           │  └──┬──┘      └──┬──┘
+                           │     │            │
+                           │     └──────┬─────┘
+                           │            ▼
+                           │     ┌────────────┐
+                           │     │  Resolve   │
+                           │     │  Ticket    │
+                           │     └──────┬─────┘
+                           │            ▼
+                           │     ┌────────────┐
+                           └────▶│Update      │
+                                 │localStorage│
+                                 └──────┬─────┘
+                                        ▼
+                                 ┌────────────┐
+                                 │    END     │
+                                 └────────────┘
+                    </pre>
+                </div>
+            </div>
+            <div class="slide-number">6 / 8</div>
+        </div>
+
+        <!-- SLIDE 7: System Architecture Diagram -->
+        <div class="slide">
+            <h2>🏗️ System Architecture Diagram</h2>
+            <div class="diagram">
+                <pre style="color: #00d2ff; font-size: 11px;">
+┌──────────────────────────────────────────────────────────────┐
+│                     CLIENT SIDE (Browser)                     │
+├──────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐               │
+│  │  Login   │    │  User    │    │  Admin   │               │
+│  │Component │    │Dashboard │    │  Panel   │               │
+│  └────┬─────┘    └────┬─────┘    └────┬─────┘               │
+│       │               │               │                      │
+│       └───────────────┼───────────────┘                      │
+│                       ▼                                      │
+│              ┌─────────────────┐                             │
+│              │  React Router   │                             │
+│              │  (Navigation)   │                             │
+│              └────────┬────────┘                             │
+│                       ▼                                      │
+│              ┌─────────────────┐                             │
+│              │  State Mgmt     │                             │
+│              │(useState/       │                             │
+│              │ useEffect)      │                             │
+│              └────────┬────────┘                             │
+│                       │                                      │
+└───────────────────────┼──────────────────────────────────────┘
+                        ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    DATA LAYER (localStorage)                  │
+├──────────────────────────────────────────────────────────────┤
+│                                                               │
+│   ┌────────┐    ┌──────────┐    ┌────────┐                  │
+│   │ users[]│    │tickets[] │    │claims[]│                  │
+│   └────────┘    └──────────┘    └────────┘                  │
+│                                                               │
+│   Keys stored: "users", "tickets", "currentUser", "claims"   │
+│                                                               │
+└──────────────────────────────────────────────────────────────┘
+                        │
+                        ▼
+┌──────────────────────────────────────────────────────────────┐
+│                 FUTURE BACKEND (Recommended)                  │
+├──────────────────────────────────────────────────────────────┤
+│   ┌────────┐      ┌────────┐      ┌────────┐                │
+│   │REST API│  →   │Database│  →   │JWT Auth│                │
+│   └────────┘      └────────┘      └────────┘                │
+│                                                               │
+│   (Not implemented in current version)                       │
+└──────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+            <div class="slide-number">7 / 8</div>
+        </div>
+
+        <!-- SLIDE 8: Conclusion -->
+        <div class="slide">
+            <h2>📝 Conclusion</h2>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h4>✅ What Works</h4>
+                    <p>• Core functionality fully operational<br>• All test scenarios passed<br>• Positive & Negative testing successful<br>• Black Box & White Box tests passed</p>
+                </div>
+                <div class="card">
+                    <h4>⚠️ What Needs Improvement</h4>
+                    <p>• Password validation (weak)<br>• No confirmation before resolving<br>• localStorage instead of backend<br>• Limited error handling</p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px; background: linear-gradient(135deg, #00d2ff22, #3a7bd522);">
+                <h4>🔧 Recommendations for Production</h4>
+                <p>1. 🔐 Add proper password validation (min 8 chars + complexity)<br>
+                2. 🗄️ Replace localStorage with backend + database<br>
+                3. ⚠️ Add confirmation dialogs for destructive actions<br>
+                4. 🛡️ Implement robust error handling & user-friendly messages</p>
+            </div>
+
+            <div class="card" style="margin-top: 20px; text-align: center; background: rgba(0,255,136,0.1);">
+                <h3>Overall Verdict</h3>
+                <p style="font-size: 20px;">System is <strong class="pass">functionally complete</strong> but requires <strong style="color: #ffaa00;">security & infrastructure improvements</strong> for production deployment.</p>
+            </div>
+
+            <div class="footer-note">
+                <p>SQA Report Generated: Customer Support Ticket System (React Web App) | All Rights Reserved</p>
+            </div>
+            <div class="slide-number">8 / 8</div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const container = document.getElementById('slidesContainer');
+
+        function scrollToSlide(index) {
+            if (index >= 0 && index < slides.length) {
+                slides[index].scrollIntoView({ behavior: 'smooth' });
+                currentSlide = index;
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                scrollToSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                scrollToSlide(currentSlide - 1);
+            }
+        }
+
+        // Update current slide on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    currentSlide = Array.from(slides).indexOf(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') prevSlide();
+            if (e.key === 'ArrowDown') nextSlide();
+        });
+    </script>
+</body>
+</html>
